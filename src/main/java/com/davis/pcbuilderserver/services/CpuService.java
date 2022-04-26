@@ -1,8 +1,10 @@
 package com.davis.pcbuilderserver.services;
 
+import com.davis.pcbuilderserver.dtos.CaseDto;
 import com.davis.pcbuilderserver.dtos.CpuDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface CpuService {
@@ -15,4 +17,6 @@ public interface CpuService {
     List<CpuDto> getAllCpusBySearch(String search, String search1, String search2);
 
     List<CpuDto> getAllCpus();
+
+    List<CpuDto> getCpuByParams(Map<String, String> params);
 }

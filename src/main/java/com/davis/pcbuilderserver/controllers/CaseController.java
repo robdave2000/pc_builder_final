@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,8 +35,8 @@ public class CaseController {
     }
 
     @GetMapping("/")
-    public List<CaseDto> getCasesByColor(@RequestParam String color)
+    public List<CaseDto> getCasesByParam(@RequestParam Map<String, String> params)
     {
-        return caseService.getCasesByColor(color);
+        return caseService.getCasesByParams(params);
     }
 }

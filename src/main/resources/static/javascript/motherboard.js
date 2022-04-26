@@ -1,6 +1,8 @@
 let productContainer = document.getElementById("product-container")
 let searchInput = document.getElementById('search-input')
 let searchForm = document.getElementById("search-form")
+let pcId = window.localStorage.getItem("pc_id")
+let headers = {'Content-Type': 'application/json'}
 
 const  baseUrl = "http://localhost:8080/api/v1/motherboards"
 
@@ -30,6 +32,14 @@ const getProductsBySearch = async (e) =>{
     createProductCards(responseArray)
 }
 
+const addMotherboardToPc = async (motherboardId, pc_Id) =>{
+    const response = await fetch(`${baseUrl}/${motherboardId}/${pc_Id}`, {
+        method: 'POST',
+        headers: headers
+    })
+        .catch(err => console.error(err.message))
+}
+
 const createProductCards = (arr) =>{
     productContainer.innerHTML = '';
     arr.forEach(obj =>{
@@ -40,13 +50,16 @@ const createProductCards = (arr) =>{
         <div class="card-body d-flex flex-column justify-content-between">
             <h5 class="card-title" data-product="${obj.id}">${obj.brand} ${obj.level} ${obj.name}</h5>
             <p class="card-text">${obj.price}</p>
-            <a href="https://amazon.com" target="_blank" class="btn btn-warning">Amazon</a>
+            <div>
+                <button onclick="addMotherboardToPc(${obj.id}, pcId)" class="btn btn-primary">Add To Pc</button>
+                <a href="https://amazon.com" target="_blank" class="btn btn-warning">Amazon</a>
+            </div>
         </div>
         `
         productContainer.append(noteCard);
     })
 }
 
-//searchForm.addEventListener("submit", getProductsBySearch())
+searchForm.addEventListener("submit", getProductsBySearch())
 
 getAllProducts(baseUrl);

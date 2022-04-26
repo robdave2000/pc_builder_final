@@ -24,14 +24,9 @@ public class CpuController {
     }
 
     @GetMapping("/")
-    public List<CpuDto> getCpusByQuery(@RequestParam Map<String, String> params){
-        if (params.containsKey("brand")){
-            return cpuService.getCpusByBrand(params.get("brand"));
-        }
-        if (params.containsKey("search")){
-            return cpuService.getAllCpusBySearch(params.get("search"), params.get("search"), params.get("search"));
-        }
-        return Collections.emptyList();
+    public List<CpuDto> getCpuByParam(@RequestParam Map<String, String> params)
+    {
+        return cpuService.getCpuByParams(params);
     }
 
     @PostMapping("/{cpuId}/{pcId}")

@@ -2,15 +2,17 @@ package com.davis.pcbuilderserver.services;
 
 import com.davis.pcbuilderserver.dtos.CaseDto;
 import com.davis.pcbuilderserver.dtos.CpuDto;
+import com.davis.pcbuilderserver.entities.Case;
 import com.davis.pcbuilderserver.entities.Cpu;
 import com.davis.pcbuilderserver.entities.Pc;
 import com.davis.pcbuilderserver.repository.CpuRepository;
 import com.davis.pcbuilderserver.repository.PcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,5 +65,15 @@ public class CpuServiceImpl implements CpuService{
     public List<CpuDto> getAllCpus() {
         List<Cpu> cpuList = cpuRepository.findAll();
         return cpuList.stream().map(cpu -> new CpuDto(cpu)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CpuDto> getCpuByParams(Map<String, String> params) {
+        if (params.containsKey("search"))
+        {
+            List<Cpu> cpuList = cpuRepository.findAllByNameOrBrandContains(params.get("search"), params.get("search"));
+            return cpuList.stream().map(cpu->new CpuDto(cpu)).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }

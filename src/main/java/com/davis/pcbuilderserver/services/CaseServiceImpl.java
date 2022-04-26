@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,13 +35,6 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
-    public List<CaseDto> getCasesByColor(String color)
-    {
-        List<Case> caseList = caseRepository.findAllByColorEquals(color);
-        return caseList.stream().map(casw-> new CaseDto(casw)).collect(Collectors.toList());
-    }
-
-    @Override
     public String addCaseToPc(Long caseId, Long pcId) {
         Optional<Case> caseOptional = caseRepository.findById(caseId);
         Optional<Pc> pcOptional = pcRepository.findById(pcId);
@@ -57,5 +52,15 @@ public class CaseServiceImpl implements CaseService {
     public List<CaseDto> getAllCases() {
         List<Case> caseList = caseRepository.findAll();
         return caseList.stream().map(casw-> new CaseDto(casw)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CaseDto> getCasesByParams(Map<String, String> params) {
+        if (params.containsKey("search"))
+        {
+            List<Case> caseList = caseRepository.findAllByNameOrBrandContains(params.get("search"), params.get("search"));
+            return caseList.stream().map(casws->new CaseDto(casws)).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }

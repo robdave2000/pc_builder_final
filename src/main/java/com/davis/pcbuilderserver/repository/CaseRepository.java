@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CaseRepository extends JpaRepository<Case, Long> {
     public List<Case> findAllByColorEquals(String color);
+
+    public List<Case> findAllByNameOrBrandContains(String name, String brand);
 }

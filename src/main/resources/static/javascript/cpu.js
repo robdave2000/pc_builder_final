@@ -1,13 +1,15 @@
 let productContainer = document.getElementById("product-container")
 let searchInput = document.getElementById('search-input')
 let searchForm = document.getElementById("search-form")
+let pcId = window.localStorage.getItem("pc_id")
+let headers = {'Content-Type': 'application/json'}
 
 const  baseUrl = "http://localhost:8080/api/v1/cpu"
 
 const getAllProducts = async (url) =>{
     const response = await fetch(`${url}`, {
         method: "GET",
-        headers: {'Content-Type': 'application/json'}
+        headers: headers
     })
         .catch(err => console.error(err.message))
 
@@ -17,17 +19,24 @@ const getAllProducts = async (url) =>{
     createProductCards(responseArr);
 }
 
-const getProductsBySearch = async (e) =>{
-    e.preventDefault()
+const getProductsBySearch = async () =>{
     const response = await fetch(`${baseUrl}/?search=${searchInput.value}`, {
         method: 'GET',
-        headers: 'Content-Type: application/json'
+        headers: headers
     })
         .catch(err => console.error(err.message))
 
     let responseArray = await response.json()
 
     createProductCards(responseArray)
+}
+
+const addCpuToPc = async (cpuId, pc_Id) =>{
+    const response = await fetch(`${baseUrl}/${cpuId}/${pc_Id}`, {
+        method: 'POST',
+        headers: headers
+    })
+        .catch(err => console.error(err.message))
 }
 
 const createProductCards = (arr) =>{
@@ -38,15 +47,21 @@ const createProductCards = (arr) =>{
         noteCard.style.width = "18rem"
         noteCard.innerHTML = `
         <div class="card-body d-flex flex-column justify-content-between">
+            <img src="https://images.unsplash.com/photo-1494083306499-e22e4a457632?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y3B1fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="cpu image" style="height: 225px; object-fit: scale-down">
             <h5 class="card-title" data-product="${obj.id}">${obj.brand} ${obj.level} ${obj.name}</h5>
             <p class="card-text">${obj.price}</p>
-            <a href="https://amazon.com" target="_blank" class="btn btn-warning">Amazon</a>
+            <div>
+                <button onclick="addCpuToPc(${obj.id}, pcId)" class="btn btn-primary">Add To Pc</button>
+                <a href="https://amazon.com" target="_blank" class="btn btn-warning">Amazon</a>
+            </div>
         </div>
         `
         productContainer.append(noteCard);
     })
 }
 
-//searchForm.addEventListener("submit", getProductsBySearch())
+searchForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    getProductsBySearch()});
 
 getAllProducts(baseUrl);

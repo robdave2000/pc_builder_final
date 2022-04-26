@@ -10,4 +10,6 @@ public interface CpuRepository extends JpaRepository<Cpu, Long> {
     public List<Cpu> findCpusByBrandOrNameOrLevelContains(String brand, String name, String level);
 
     List<Cpu> findCpusByBrand(String brand);
+
+    List<Cpu> findAllByNameOrBrandContains(String name, String brand);
 }

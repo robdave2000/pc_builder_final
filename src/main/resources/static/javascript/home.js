@@ -158,6 +158,7 @@ async function getCart()
     let responseArr = await repsonse.json();
 
     let cartObject = responseArr[0];
+    window.localStorage.setItem("pc_id", cartObject.id);
     populateCaseChoice(cartObject.casw);
     populateCpuChoice(cartObject.cpu);
     populateCpuCoolerChoice(cartObject.cpuCooler);
